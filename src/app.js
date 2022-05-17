@@ -26,7 +26,7 @@ class App {
         this.app.use(express.json())
 
         // habilitando no express o caminho estatico das imagens do servidor (ate a pasta uploads é estático após isso /images/1652808113890_16457.png é variável)
-        this.app.use(express.static(resolve(__dirname, 'uploads')))  
+        this.app.use(express.static(resolve(__dirname, '..', 'uploads')))  
 
         //this.app.use(authMiddleware)
     }

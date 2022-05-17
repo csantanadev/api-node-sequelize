@@ -8,8 +8,7 @@ export default /*async*/ (req, res, next) => {
     if (!authorization) {
         return res.status(401).json({ message: 'invalid token' })
     }
-
-    // Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZW1haWwiOiJjYXJsb3NzYW50YW5hLmRlc2VudkBnbWFpbC5jb20
+    
     const [typeAuthorization, token] = authorization.split(' ')
 
     if (!typeAuthorization || typeAuthorization !== 'Bearer') {
@@ -22,15 +21,11 @@ export default /*async*/ (req, res, next) => {
         const dados = jwt.verify(token, process.env.TOKEN_SECRET)
         const { id, email } = dados
 
-
-        // Existe uma imensa discussão na internet se é realmente necessário verificar se o usuário não 
-        // mudou o email na sua plataforma. Se ele mudou, é necessário que este token gerado já não esteja mais válido e ele tenha que 
-        // novamente fazer um novo login e obter um novo token. Por outro lado isso pode trazer sérios problemas de performance se toda as vezes
-        // eu tiver que ir na minha base validar se o email mudou ou não (ir em todas as rotas protegidas)
-
         /*
-        Minha opinião como dev é que não é necessário este tipo de implementação, uma vez que o email deveria ser a chave identificadora do usuário
-        e isso trás sérios problemas de performance.
+        ::Expirar o token caso o usuario não exista mais por algum outro motivo::
+        
+        Não é necessário este tipo de implementação, uma vez que o email deveria ser a chave identificadora do usuário
+        e isso trás sérios problemas de performance ter ir toda vez no bd.
 
         const user = await User.findOne({ where: { id, email } })
         if (!user) {

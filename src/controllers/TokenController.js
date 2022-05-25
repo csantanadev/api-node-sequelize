@@ -23,11 +23,11 @@ class TokenController {
             return res.status(404).json({ message: 'invalid password' })
         }
 
-        const { id } = user
-        
+        const { id, nome } = user
+
         // criando o token com o id e o email
         const token = jwt.sign({ id, email }, process.env.TOKEN_SECRET, { expiresIn: process.env.TOKEN_EXPIRATION })
-        res.json({ token })
+        res.json({ token, user: { id, nome, email } })
     }
 
 
